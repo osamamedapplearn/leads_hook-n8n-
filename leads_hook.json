@@ -1,0 +1,107 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "availableInChat": true,
+        "options": {}
+      },
+      "id": "e73ce2e3-7731-4007-aeaa-a656f54021fc",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1,
+      "position": [ 1840, 528 ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.platform }}",
+        "rules": {
+          "rules": [
+            { "value2": "facebook" },
+            { "value2": "instagram", "output": 1 },
+            { "value2": "tiktok", "output": 2 }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [ 2432, 496 ],
+      "id": "3d0e179f-8a9b-4435-83c1-56bd7cafa58b",
+      "name": "Platform Switch"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "Us34x9p7VgjCz99H6",
+          "mode": "list",
+          "cachedResultName": "Facebook Search Scraper (apify/facebook-search-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/Us34x9p7VgjCz99H6/input"
+        },
+        "customBody": "={\n  \"categories\": {{ JSON.stringify($node['Code in JavaScript'].json.categories || [\"شركات\"]) }},\n  \"locations\": {{ JSON.stringify($node['Code in JavaScript'].json.locations || [\"\"]) }},\n  \"resultsLimit\": {{ $node['Code in JavaScript'].json.limit || 20 }}\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [ 2688, 368 ],
+      "id": "daa1ba0f-fd78-4e84-9018-7ff5e3fb3659",
+      "name": "Apify Facebook"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorSource": "store",
+        "actorId": {
+          "__rl": true,
+          "value": "DrF9mzPPEuVizVF4l",
+          "mode": "list",
+          "cachedResultName": "Instagram Search Scraper (apify/instagram-search-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/DrF9mzPPEuVizVF4l/input"
+        },
+        "customBody": "={\n  \"search\": \"{{ $node['Code in JavaScript'].json.search || 'شركات' }}\",\n  \"searchLimit\": {{ $node['Code in JavaScript'].json.limit || 20 }},\n  \"searchType\": \"user\",\n  \"enhanceUserSearchWithFacebookPage\": true\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [ 2688, 512 ],
+      "id": "f39eb88c-c93e-46ac-9999-d16d7086555c",
+      "name": "Apify Instagram"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "OtzYfK1ndEGdwWFKQ",
+          "mode": "list",
+          "cachedResultName": "TikTok Data Extractor (clockworks/free-tiktok-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/OtzYfK1ndEGdwWFKQ/input"
+        },
+        "customBody": "={\n  \"searchQueries\": {{ JSON.stringify($node['Code in JavaScript'].json.searchQueries || [\"تريند\"]) }},\n  \"hashtags\": {{ JSON.stringify($node['Code in JavaScript'].json.hashtags || [\"fyp\"]) }},\n  \"resultsPerPage\": {{ $node['Code in JavaScript'].json.limit || 20 }},\n  \"searchSection\": \"/user\",\n  \"excludePinnedPosts\": false,\n  \"shouldDownloadCovers\": false,\n  \"shouldDownloadSlideshowImages\": false,\n  \"shouldDownloadSubtitles\": false,\n  \"shouldDownloadVideos\": false\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [ 2688, 688 ],
+      "id": "748bc234-ce29-4ed8-8d97-e321cecac64e",
+      "name": "Apify TikTok"
+    },
+    {
+      "parameters": {
+        "projectId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CLOUD_PROJECT_ID",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleVertex",
+      "typeVersion": 1,
+      "position": [ 2880, 1040 ],
+      "id": "afbf15d5-a7ec-423f-81f7-a58baab9591f",
+      "name": "Google Vertex Chat Model1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let text = $input.first().json.output;\nlet cleanText = text.replace(/
+http://googleusercontent.com/immersive_entry_chip/0
+http://googleusercontent.com/immersive_entry_chip/1
